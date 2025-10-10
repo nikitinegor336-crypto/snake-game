@@ -78,3 +78,41 @@ function collision(head, arr) {
 }
 
 let game = setInterval(draw, 150);
+
+
+// === Управление змейкой ===
+
+// --- Клавиши (для ПК) ---
+document.addEventListener("keydown", event => {
+  if (event.key === "ArrowUp" && dir !== "DOWN") dir = "UP";
+  else if (event.key === "ArrowDown" && dir !== "UP") dir = "DOWN";
+  else if (event.key === "ArrowLeft" && dir !== "RIGHT") dir = "LEFT";
+  else if (event.key === "ArrowRight" && dir !== "LEFT") dir = "RIGHT";
+});
+
+// --- Свайпы (для телефона) ---
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener("touchstart", e => {
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+});
+
+document.addEventListener("touchend", e => {
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+
+  // Определяем, по какой оси движение больше
+  if (Math.abs(dx) > Math.abs(dy)) {
+    // Горизонтальное движение
+    if (dx > 0 && dir !== "LEFT") dir = "RIGHT";
+    else if (dx < 0 && dir !== "RIGHT") dir = "LEFT";
+  } else {
+    // Вертикальное движение
+    if (dy > 0 && dir !== "UP") dir = "DOWN";
+    else if (dy < 0 && dir !== "DOWN") dir = "UP";
+  }
+});
