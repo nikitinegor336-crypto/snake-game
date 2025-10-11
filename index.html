@@ -11,6 +11,28 @@
   <h1>🐍 Змейка</h1>
   <canvas id="game" width="400" height="400"></canvas>
   <p>Очки: <span id="score">0</span></p>
+  <button id="restartBtn">🔄 Перезапустить</button>
+
+
   <script src="script.js"></script>
+
+  <!-- 🔥 Скрипт для автоматического обновления версии (антикеш) -->
+  <script>
+    const currentUrl = window.location.href.split('?')[0];
+    const randomParam = 'v=' + new Date().getTime();
+    const newUrl = `${currentUrl}?${randomParam}`;
+    if (!window.location.href.includes('v=')) {
+      window.location.replace(newUrl);
+    }
+  </script>
+
+  <!-- 🚫 Блокируем системные свайпы (чтобы игра не сворачивалась) -->
+  <script>
+    document.body.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+    }, { passive: false });
+  </script>
+
 </body>
 </html>
+
