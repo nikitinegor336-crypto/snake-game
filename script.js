@@ -123,3 +123,17 @@ document.addEventListener("touchend", e => {
   }
 });
 
+// === Перезапуск игры ===
+document.getElementById("restartBtn").addEventListener("click", () => {
+  clearInterval(game);
+  score = 0;
+  document.getElementById("score").innerText = score;
+  snake = [{ x: 9 * box, y: 10 * box }];
+  dir = null;
+  food = {
+    x: Math.floor(Math.random() * 20) * box,
+    y: Math.floor(Math.random() * 20) * box
+  };
+  game = setInterval(draw, 150);
+});
+
