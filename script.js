@@ -3,6 +3,12 @@ tg.expand(); // делает окно на весь экран
 tg.ready(); // сообщает Telegram, что приложение загружено
 
 
+// Отключаем стандартные свайпы, чтобы Telegram не сворачивал игру
+document.body.addEventListener('touchmove', function (e) {
+  e.preventDefault();
+}, { passive: false });
+
+
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const box = 20;
@@ -116,3 +122,4 @@ document.addEventListener("touchend", e => {
     else if (dy < 0 && dir !== "DOWN") dir = "UP";
   }
 });
+
