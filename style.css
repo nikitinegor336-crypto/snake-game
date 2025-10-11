@@ -10,3 +10,18 @@ canvas {
   border: 2px solid #30363d;
   margin-top: 10px;
 }
+
+#restartBtn {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background: #00a86b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#restartBtn:hover {
+  background: #008f5a;
+}
