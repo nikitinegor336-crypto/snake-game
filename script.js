@@ -108,42 +108,59 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("leftBtn").addEventListener("click", () => { if(dir !== "RIGHT") dir = "LEFT"; });
   document.getElementById("rightBtn").addEventListener("click", () => { if(dir !== "LEFT") dir = "RIGHT"; });
 
-  // ===== Основная логика игры =====
-  function draw() {
-    ctx.clearRect(0, 0, 400, 400);
-    for (let i = 0; i < snake.length; i++) {
-      ctx.fillStyle = i === 0 ? "#00FF7F" : "#008000";
-      ctx.fillRect(snake[i].x, snake[i].y, box, box);
-    }
+// ===== Основная логика игры =====
+function draw() {
+  ctx.clearRect(0, 0, 400, 400);
 
-    ctx.fillStyle = "#FF4040";
-    ctx.fillRect(food.x, food.y, box, box);
-
-    let snakeX = snake[0].x;
-    let snakeY = snake[0].y;
-
-    if (dir === "LEFT") snakeX -= box;
-    if (dir === "UP") snakeY -= box;
-    if (dir === "RIGHT") snakeX += box;
-    if (dir === "DOWN") snakeY += box;
-
-    if (snakeX === food.x && snakeY === food.y) {
-      score++;
-      scoreDisplay.innerText = score;
-      food = randomFood();
-    } else snake.pop();
-
-    const newHead = { x: snakeX, y: snakeY };
-
-    if (snakeX < 0 || snakeY < 0 || snakeX >= 400 || snakeY >= 400 || collision(newHead, snake)) {
-      clearInterval(game);
-      alert("Игра окончена! Ваш счёт: " + score);
-      menu.style.display = "block";
-      gameContainer.style.display = "none";
-    }
-
-    snake.unshift(newHead);
+  // Отрисовка змейки
+  for (let i = 0; i < snake.length; i++) {
+    ctx.fillStyle = i === 0 ? "#00FF7F" : "#008000";
+    ctx.fillRect(snake[i].x, snake[i].y, box, box);
   }
+
+  // Отрисовка еды
+  ctx.fillStyle = "#FF4040";
+  ctx.fillRect(food.x, food.y, box, box);
+
+  // Координаты головы
+  let snakeX = snake[0].x;
+  let snakeY = snake[0].y;
+
+  // Управление направлением
+  if (dir === "LEFT") snakeX -= box;
+  if (dir === "UP") snakeY -= box;
+  if (dir === "RIGHT") snakeX += box;
+  if (dir === "DOWN") snakeY += box;
+
+  // Проверка на поедание еды
+  if (snakeX === food.x && snakeY === food.y) {
+    score++;
+    scoreDisplay.innerText = score;
+    food = randomFood();
+  } else {
+    snake.pop();
+  }
+
+  // Создаём новую голову
+  const newHead = { x: snakeX, y: snakeY };
+
+  // Проверяем на выход за границы или столкновение
+  if (
+    snakeX < 0 ||
+    snakeY < 0 ||
+    snakeX > canvas.width - box ||  // ✅ исправлено
+    snakeY > canvas.height - box || // ✅ исправлено
+    collision(newHead, snake)
+  ) {
+    clearInterval(game);
+    alert("Игра окончена! Ваш счёт: " + score);
+    menu.style.display = "block";
+    gameContainer.style.display = "none";
+  }
+
+  // Добавляем новую голову змейки
+  snake.unshift(newHead);
+}
 
   function collision(head, arr) {
     for (let i = 0; i < arr.length; i++) {
@@ -152,3 +169,4 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   }
 });
+
