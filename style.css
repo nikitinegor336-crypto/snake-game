@@ -47,6 +47,7 @@ body {
 /* === Игра === */
 #game-container {
   text-align: center;
+  position: relative; /* Для виртуальных кнопок */
 }
 
 #game {
@@ -56,24 +57,84 @@ body {
   border-radius: 10px;
 }
 
+/* Кнопка перезапуска */
 #restartBtn {
-  margin-top: 10px;
-  padding: 8px 18px;
-  font-size: 1em;
-  background-color: #00A86B;
+  padding: 10px 20px;
+  font-size: 18px;
   border: none;
-  border-radius: 8px;
-  color: white;
+  border-radius: 10px;
+  background-color: #FF4040;
+  color: #fff;
   cursor: pointer;
   transition: 0.2s;
 }
 
 #restartBtn:hover {
-  background-color: #00FF7F;
+  background-color: #cc3333;
 }
 
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Очки */
+#score {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
+
+/* === Виртуальные кнопки управления === */
+#touch-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  gap: 10px;
+  width: 150px;
+  height: 150px;
+  z-index: 1000;
+}
+
+#touch-controls button {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  touch-action: none;
+}
+
+#upBtn { grid-area: up; }
+#downBtn { grid-area: down; }
+#leftBtn { grid-area: left; }
+#rightBtn { grid-area: right; }
+
+/* === Адаптивность для мобильных устройств === */
+@media (max-width: 500px) {
+  #game {
+    width: 300px;
+    height: 300px;
+  }
+  #snake-animation {
+    width: 300px;
+    height: 150px;
+  }
+  .menu-buttons button, #restartBtn {
+    width: 150px;
+    font-size: 16px;
+  }
+  #touch-controls {
+    width: 120px;
+    height: 120px;
+  }
+  #touch-controls button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
