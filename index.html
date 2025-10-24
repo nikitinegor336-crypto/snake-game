@@ -1,74 +1,42 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SnakeSim 🐍</title>
+  <title>🐍 Змейка</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* ====== Виртуальные кнопки управления ====== */
-    #touch-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: grid;
-      grid-template-areas:
-        ". up ."
-        "left . right"
-        ". down .";
-      gap: 10px;
-      width: 150px;
-      height: 150px;
-      z-index: 1000;
-    }
-
-    #touch-controls button {
-      width: 50px;
-      height: 50px;
-      font-size: 24px;
-      background: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      touch-action: none;
-    }
-
-    #upBtn { grid-area: up; }
-    #downBtn { grid-area: down; }
-    #leftBtn { grid-area: left; }
-    #rightBtn { grid-area: right; }
-  </style>
 </head>
 <body>
-  <!-- 🐍 Главное меню -->
+
+  <!-- Главное меню -->
   <div id="menu">
-    <h1 class="logo">🐍 SnakeSim</h1>
     <canvas id="snake-animation" width="400" height="200"></canvas>
-    <div class="menu-buttons">
-      <button id="playBtn">🎮 Играть</button>
-      <button id="recordsBtn">🏆 Рекорды</button>
-      <button id="settingsBtn">⚙️ Настройки</button>
-    </div>
+    <h1>🐍 Змейка</h1>
+    <button id="playBtn">🎮 Играть</button>
+    <button id="recordsBtn">🏆 Рекорды</button>
+    <button id="settingsBtn">⚙️ Настройки</button>
   </div>
 
-  <!-- 🎮 Игра -->
-  <div id="game-container" style="display:none; position: relative;">
-    <h2>🐍 Змейка</h2>
-    <canvas id="game" width="400" height="400"></canvas>
+  <!-- Игра -->
+  <div id="game-container" style="display:none;">
     <p>Очки: <span id="score">0</span></p>
+    <canvas id="game" width="400" height="400"></canvas>
     <button id="restartBtn">🔄 Перезапустить</button>
 
-    <!-- Виртуальные кнопки -->
-    <div id="touch-controls">
-      <button id="upBtn">↑</button>
-      <button id="leftBtn">←</button>
-      <button id="downBtn">↓</button>
-      <button id="rightBtn">→</button>
+    <!-- Виртуальные кнопки управления -->
+    <div id="controls">
+      <button id="upBtn">⬆️</button>
+      <div>
+        <button id="leftBtn">⬅️</button>
+        <button id="downBtn">⬇️</button>
+        <button id="rightBtn">➡️</button>
+      </div>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+
