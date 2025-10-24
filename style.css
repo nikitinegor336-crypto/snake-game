@@ -1,140 +1,57 @@
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(120deg, #101820, #1b2735);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  font-family: "Arial", sans-serif;
+  background: radial-gradient(circle at center, #101010, #000);
+  color: #fff;
+  text-align: center;
   overflow: hidden;
 }
 
-/* === Меню === */
-#menu {
-  text-align: center;
-  animation: fadeIn 1s ease;
+h1 {
+  font-size: 2em;
+  margin: 20px 0;
 }
 
-.logo {
-  font-size: 2.5em;
-  margin-bottom: 10px;
-  color: #00FF7F;
-  text-shadow: 0 0 10px #00FF7F;
-}
-
-.menu-buttons button {
-  display: block;
-  margin: 10px auto;
-  padding: 12px 25px;
+#menu button, #game-container button {
+  background-color: #00a86b;
+  color: white;
   border: none;
   border-radius: 12px;
+  padding: 12px 20px;
+  margin: 8px;
   font-size: 1.1em;
-  cursor: pointer;
-  color: #fff;
-  background-color: #00A86B;
-  box-shadow: 0 0 10px #00A86B;
-  transition: all 0.2s ease;
-}
-
-.menu-buttons button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #00FF7F;
-}
-
-/* === Игра === */
-#game-container {
-  text-align: center;
-  position: relative; /* Для виртуальных кнопок */
-}
-
-#game {
-  background-color: #111;
-  border: 2px solid #00A86B;
-  box-shadow: 0 0 10px #00A86B;
-  border-radius: 10px;
-}
-
-/* Кнопка перезапуска */
-#restartBtn {
-  padding: 10px 20px;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  background-color: #FF4040;
-  color: #fff;
   cursor: pointer;
   transition: 0.2s;
 }
 
-#restartBtn:hover {
-  background-color: #cc3333;
+#menu button:hover, #game-container button:hover {
+  background-color: #00c77d;
 }
 
-/* Очки */
-#score {
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 10px;
+#game {
+  border: 2px solid #00a86b;
+  background-color: #111;
+  margin-top: 10px;
 }
 
-/* === Виртуальные кнопки управления === */
-#touch-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: grid;
-  grid-template-areas:
-    ". up ."
-    "left . right"
-    ". down .";
-  gap: 10px;
-  width: 150px;
-  height: 150px;
-  z-index: 1000;
+#controls {
+  margin-top: 15px;
 }
 
-#touch-controls button {
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  border: none;
+#controls button {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5em;
+  margin: 5px;
+  background-color: #222;
+  border: 2px solid #00a86b;
   border-radius: 10px;
-  touch-action: none;
 }
 
-#upBtn { grid-area: up; }
-#downBtn { grid-area: down; }
-#leftBtn { grid-area: left; }
-#rightBtn { grid-area: right; }
-
-/* === Адаптивность для мобильных устройств === */
-@media (max-width: 500px) {
-  #game {
-    width: 300px;
-    height: 300px;
-  }
-  #snake-animation {
-    width: 300px;
-    height: 150px;
-  }
-  .menu-buttons button, #restartBtn {
-    width: 150px;
-    font-size: 16px;
-  }
-  #touch-controls {
-    width: 120px;
-    height: 120px;
-  }
-  #touch-controls button {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
+#controls button:active {
+  background-color: #00a86b;
 }
 
+#snake-animation {
+  background: transparent;
+}
