@@ -6,6 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SnakeSim 🐍</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* ====== Виртуальные кнопки управления ====== */
+    #touch-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-areas:
+        ". up ."
+        "left . right"
+        ". down .";
+      gap: 10px;
+      width: 150px;
+      height: 150px;
+      z-index: 1000;
+    }
+
+    #touch-controls button {
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      touch-action: none;
+    }
+
+    #upBtn { grid-area: up; }
+    #downBtn { grid-area: down; }
+    #leftBtn { grid-area: left; }
+    #rightBtn { grid-area: right; }
+  </style>
 </head>
 <body>
   <!-- 🐍 Главное меню -->
@@ -20,11 +54,19 @@
   </div>
 
   <!-- 🎮 Игра -->
-  <div id="game-container" style="display:none;">
+  <div id="game-container" style="display:none; position: relative;">
     <h2>🐍 Змейка</h2>
     <canvas id="game" width="400" height="400"></canvas>
     <p>Очки: <span id="score">0</span></p>
     <button id="restartBtn">🔄 Перезапустить</button>
+
+    <!-- Виртуальные кнопки -->
+    <div id="touch-controls">
+      <button id="upBtn">↑</button>
+      <button id="leftBtn">←</button>
+      <button id="downBtn">↓</button>
+      <button id="rightBtn">→</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
