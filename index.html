@@ -13,10 +13,9 @@
   <p>Очки: <span id="score">0</span></p>
   <button id="restartBtn">🔄 Перезапустить</button>
 
-
   <script src="script.js"></script>
 
-  <!-- 🔥 Скрипт для автоматического обновления версии (антикеш) -->
+  <!-- 🔥 Антикеш -->
   <script>
     const currentUrl = window.location.href.split('?')[0];
     const randomParam = 'v=' + new Date().getTime();
@@ -26,46 +25,20 @@
     }
   </script>
 
-  <!-- 🚫 Блокируем системные свайпы (чтобы игра не сворачивалась) -->
+  <!-- 🚫 Блокируем свайпы, чтобы мини-приложение не сворачивалось -->
   <script>
     document.body.addEventListener('touchmove', function (e) {
       e.preventDefault();
     }, { passive: false });
   </script>
 
-<script>
-  const tg = window.Telegram.WebApp;
-
-  // Подготовка интерфейса
-  tg.expand(); // на весь экран
-  tg.ready();
-
-  // Настройка основной кнопки
-  tg.MainButton.text = "🎮 Играть";
-  tg.MainButton.color = "#00A86B"; // зелёная кнопка
-  tg.MainButton.textColor = "#ffffff";
-  tg.MainButton.show();
-
-  // Когда нажали кнопку
-  tg.MainButton.onClick(() => {
-    // Показываем игру
-    document.querySelector("canvas").style.display = "block";
-    document.querySelector("p").style.display = "block";
-    document.querySelector("#restartBtn").style.display = "block";
-    tg.MainButton.hide(); // убираем кнопку после входа
-  });
-
-  // Скрываем игру по умолчанию
-  window.addEventListener("load", () => {
-    document.querySelector("canvas").style.display = "none";
-    document.querySelector("p").style.display = "none";
-    document.querySelector("#restartBtn").style.display = "none";
-  });
-</script>
+  <!-- ⚙️ Telegram WebApp API -->
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+  </script>
 
 </body>
 </html>
-
-
-
 
