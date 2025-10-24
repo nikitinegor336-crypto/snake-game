@@ -8,6 +8,7 @@ const gameContainer = document.getElementById("game-container");
 const playBtn = document.getElementById("playBtn");
 const recordsBtn = document.getElementById("recordsBtn");
 const settingsBtn = document.getElementById("settingsBtn");
+const restartBtn = document.getElementById("restartBtn");
 
 // ====== Игра ======
 const canvas = document.getElementById("game");
@@ -51,6 +52,10 @@ playBtn.addEventListener("click", () => {
   startGame();
 });
 
+restartBtn.addEventListener("click", () => {
+  startGame();
+});
+
 function startGame() {
   snake = [{ x: 9 * box, y: 10 * box }];
   food = randomFood();
@@ -68,6 +73,7 @@ function randomFood() {
   };
 }
 
+// ====== Клавиатурное управление ======
 document.addEventListener("keydown", direction);
 
 function direction(event) {
@@ -77,6 +83,45 @@ function direction(event) {
   else if (event.keyCode == 40 && dir !== "UP") dir = "DOWN";
 }
 
+// ====== Улучшенное мобильное управление (свайпы) ======
+let startX, startY;
+const SWIPE_THRESHOLD = 30;
+
+document.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+}, false);
+
+document.addEventListener('touchend', function(e) {
+    let endX = e.changedTouches[0].clientX;
+    let endY = e.changedTouches[0].clientY;
+
+    let dx = endX - startX;
+    let dy = endY - startY;
+
+    if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0 && dir !== "LEFT") dir = "RIGHT";
+        else if (dx < 0 && dir !== "RIGHT") dir = "LEFT";
+    } else {
+        if (dy > 0 && dir !== "UP") dir = "DOWN";
+        else if (dy < 0 && dir !== "DOWN") dir = "UP";
+    }
+}, false);
+
+// Блокировка скролла страницы при свайпе
+document.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, { passive: false });
+
+// ====== Виртуальные кнопки на экране ======
+document.getElementById("upBtn").addEventListener("click", () => { if(dir !== "DOWN") dir = "UP"; });
+document.getElementById("downBtn").addEventListener("click", () => { if(dir !== "UP") dir = "DOWN"; });
+document.getElementById("leftBtn").addEventListener("click", () => { if(dir !== "RIGHT") dir = "LEFT"; });
+document.getElementById("rightBtn").addEventListener("click", () => { if(dir !== "LEFT") dir = "RIGHT"; });
+
+// ====== Основная функция игры ======
 function draw() {
   ctx.clearRect(0, 0, 400, 400);
 
@@ -103,28 +148,3 @@ function draw() {
   } else {
     snake.pop();
   }
-
-  const newHead = { x: snakeX, y: snakeY };
-
-  if (
-    snakeX < 0 ||
-    snakeY < 0 ||
-    snakeX >= 400 ||
-    snakeY >= 400 ||
-    collision(newHead, snake)
-  ) {
-    clearInterval(game);
-    alert("Игра окончена! Ваш счёт: " + score);
-    menu.style.display = "block";
-    gameContainer.style.display = "none";
-  }
-
-  snake.unshift(newHead);
-}
-
-function collision(head, arr) {
-  for (let i = 0; i < arr.length; i++) {
-    if (head.x == arr[i].x && head.y == arr[i].y) return true;
-  }
-  return false;
-}
