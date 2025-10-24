@@ -4,41 +4,29 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snake Game</title>
+  <title>SnakeSim 🐍</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🐍 Змейка</h1>
-  <canvas id="game" width="400" height="400"></canvas>
-  <p>Очки: <span id="score">0</span></p>
-  <button id="restartBtn">🔄 Перезапустить</button>
+  <!-- 🐍 Главное меню -->
+  <div id="menu">
+    <h1 class="logo">🐍 SnakeSim</h1>
+    <canvas id="snake-animation" width="400" height="200"></canvas>
+    <div class="menu-buttons">
+      <button id="playBtn">🎮 Играть</button>
+      <button id="recordsBtn">🏆 Рекорды</button>
+      <button id="settingsBtn">⚙️ Настройки</button>
+    </div>
+  </div>
+
+  <!-- 🎮 Игра -->
+  <div id="game-container" style="display:none;">
+    <h2>🐍 Змейка</h2>
+    <canvas id="game" width="400" height="400"></canvas>
+    <p>Очки: <span id="score">0</span></p>
+    <button id="restartBtn">🔄 Перезапустить</button>
+  </div>
 
   <script src="script.js"></script>
-
-  <!-- 🔥 Антикеш -->
-  <script>
-    const currentUrl = window.location.href.split('?')[0];
-    const randomParam = 'v=' + new Date().getTime();
-    const newUrl = `${currentUrl}?${randomParam}`;
-    if (!window.location.href.includes('v=')) {
-      window.location.replace(newUrl);
-    }
-  </script>
-
-  <!-- 🚫 Блокируем свайпы, чтобы мини-приложение не сворачивалось -->
-  <script>
-    document.body.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-    }, { passive: false });
-  </script>
-
-  <!-- ⚙️ Telegram WebApp API -->
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.ready();
-  </script>
-
 </body>
 </html>
-
