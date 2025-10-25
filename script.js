@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const tg = window.Telegram.WebApp;
-  tg.expand();
-  tg.ready();
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.expand();
+    tg.ready();
+  }
 
   // ===== Элементы =====
   const menu = document.getElementById("menu");
@@ -9,11 +11,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const playBtn = document.getElementById("playBtn");
   const restartBtn = document.getElementById("restartBtn");
   const scoreDisplay = document.getElementById("score");
+  const title = document.querySelector(".title");
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
 
+  // Новый экран конца игры
+  const gameOverScreen = document.createElement("div");
+  gameOverScreen.classList.add("game-over");
+  gameOverScreen.innerHTML = `
+    <h2>Игра окончена 🐍</h2>
+    <p id="finalScore">Ваш счёт: 0</p>
+    <button id="tryAgainBtn" class="neon-button">Играть снова</button>
+  `;
+  gameContainer.appendChild(gameOverScreen);
+  gameOverScreen.style.display = "none";
+
+  const tryAgainBtn = gameOverScreen.querySelector("#tryAgainBtn");
+
+  // Название
+  title.textContent = "Snake";
+
   const box = 20;
-  let snake, food, dir, game, score = 0;
+  let snake, food, dir, game, score = 0, isGameOver = false;
 
   // ===== Мини-змейка в меню =====
   const animCanvas = document.getElementById("snake-animation");
@@ -35,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (animDir === "DOWN") head.y++;
     animSnake.unshift(head);
     animSnake.pop();
-
     if (head.x >= 40 || head.x < 0) animDir = animDir === "RIGHT" ? "LEFT" : "RIGHT";
     if (head.y >= 20 || head.y < 0) animDir = animDir === "DOWN" ? "UP" : "DOWN";
   }
@@ -49,13 +67,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   restartBtn.addEventListener("click", startGame);
+  tryAgainBtn.addEventListener("click", startGame);
 
   function startGame() {
     snake = [{ x: 9 * box, y: 10 * box }];
     food = randomFood();
     dir = null;
     score = 0;
+    isGameOver = false;
     scoreDisplay.innerText = score;
+    gameOverScreen.style.display = "none";
     clearInterval(game);
     game = setInterval(draw, 150);
   }
@@ -67,15 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // ===== Управление (клавиатура) =====
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft" && dir !== "RIGHT") dir = "LEFT";
-    else if (e.key === "ArrowUp" && dir !== "DOWN") dir = "UP";
-    else if (e.key === "ArrowRight" && dir !== "LEFT") dir = "RIGHT";
-    else if (e.key === "ArrowDown" && dir !== "UP") dir = "DOWN";
+  // ===== Управление =====
+  window.addEventListener("keydown", (e) => {
+    const key = e.key.toLowerCase();
+    if (["arrowleft", "a"].includes(key) && dir !== "RIGHT") dir = "LEFT";
+    else if (["arrowup", "w"].includes(key) && dir !== "DOWN") dir = "UP";
+    else if (["arrowright", "d"].includes(key) && dir !== "LEFT") dir = "RIGHT";
+    else if (["arrowdown", "s"].includes(key) && dir !== "UP") dir = "DOWN";
   });
 
-  // ===== Управление свайпами =====
   let startX, startY;
   const SWIPE_THRESHOLD = 30;
   document.addEventListener("touchstart", e => {
@@ -99,68 +120,104 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, false);
 
-  // ===== Блокировка системных свайпов =====
   document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
-  // ===== Виртуальные кнопки =====
   document.getElementById("upBtn").addEventListener("click", () => { if(dir !== "DOWN") dir = "UP"; });
   document.getElementById("downBtn").addEventListener("click", () => { if(dir !== "UP") dir = "DOWN"; });
   document.getElementById("leftBtn").addEventListener("click", () => { if(dir !== "RIGHT") dir = "LEFT"; });
   document.getElementById("rightBtn").addEventListener("click", () => { if(dir !== "LEFT") dir = "RIGHT"; });
 
-// ===== Основная логика игры =====
-function draw() {
-  ctx.clearRect(0, 0, 400, 400);
+  // ===== Основная логика =====
+  function draw() {
+    if (isGameOver) return;
+    ctx.clearRect(0, 0, 400, 400);
 
-  // Отрисовка змейки
-  for (let i = 0; i < snake.length; i++) {
-    ctx.fillStyle = i === 0 ? "#00FF7F" : "#008000";
-    ctx.fillRect(snake[i].x, snake[i].y, box, box);
+    // Еда
+    drawApple(food.x, food.y);
+
+    // Змейка
+    for (let i = 0; i < snake.length; i++) {
+      if (i === 0) drawSnakeHead(snake[i].x, snake[i].y);
+      else drawSnakeBody(snake[i].x, snake[i].y);
+    }
+
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
+
+    if (dir === "LEFT") snakeX -= box;
+    if (dir === "UP") snakeY -= box;
+    if (dir === "RIGHT") snakeX += box;
+    if (dir === "DOWN") snakeY += box;
+
+    if (snakeX === food.x && snakeY === food.y) {
+      score++;
+      scoreDisplay.innerText = score;
+      food = randomFood();
+    } else snake.pop();
+
+    const newHead = { x: snakeX, y: snakeY };
+
+    if (
+      snakeX < 0 ||
+      snakeY < 0 ||
+      snakeX > canvas.width - box ||
+      snakeY > canvas.height - box ||
+      collision(newHead, snake)
+    ) {
+      gameOver(score);
+      return;
+    }
+
+    snake.unshift(newHead);
   }
 
-  // Отрисовка еды
-  ctx.fillStyle = "#FF4040";
-  ctx.fillRect(food.x, food.y, box, box);
-
-  // Координаты головы
-  let snakeX = snake[0].x;
-  let snakeY = snake[0].y;
-
-  // Управление направлением
-  if (dir === "LEFT") snakeX -= box;
-  if (dir === "UP") snakeY -= box;
-  if (dir === "RIGHT") snakeX += box;
-  if (dir === "DOWN") snakeY += box;
-
-  // Проверка на поедание еды
-  if (snakeX === food.x && snakeY === food.y) {
-    score++;
-    scoreDisplay.innerText = score;
-    food = randomFood();
-  } else {
-    snake.pop();
-  }
-
-  // Создаём новую голову
-  const newHead = { x: snakeX, y: snakeY };
-
-  // Проверяем на выход за границы или столкновение
-  if (
-    snakeX < 0 ||
-    snakeY < 0 ||
-    snakeX > canvas.width - box ||  // ✅ исправлено
-    snakeY > canvas.height - box || // ✅ исправлено
-    collision(newHead, snake)
-  ) {
+  function gameOver(finalScore) {
     clearInterval(game);
-    alert("Игра окончена! Ваш счёт: " + score);
-    menu.style.display = "block";
-    gameContainer.style.display = "none";
+    isGameOver = true;
+    document.getElementById("finalScore").textContent = "Ваш счёт: " + finalScore;
+    gameOverScreen.style.display = "flex";
   }
 
-  // Добавляем новую голову змейки
-  snake.unshift(newHead);
-}
+  // ===== Графика =====
+  function drawSnakeHead(x, y) {
+    ctx.fillStyle = "#00FF7F";
+    ctx.beginPath();
+    ctx.roundRect(x, y, box, box, 6);
+    ctx.fill();
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.arc(x + 6, y + 6, 2, 0, Math.PI * 2);
+    ctx.arc(x + 14, y + 6, 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawSnakeBody(x, y) {
+    const gradient = ctx.createLinearGradient(x, y, x + box, y + box);
+    gradient.addColorStop(0, "#008000");
+    gradient.addColorStop(1, "#00CC66");
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.roundRect(x, y, box, box, 4);
+    ctx.fill();
+  }
+
+  function drawApple(x, y) {
+    ctx.beginPath();
+    ctx.arc(x + box / 2, y + box / 2, box / 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = "#FF3B30";
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x + box / 2, y + box / 2 - 10);
+    ctx.lineTo(x + box / 2, y + box / 2 - 15);
+    ctx.strokeStyle = "#654321";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + box / 2, y + box / 2 - 13);
+    ctx.quadraticCurveTo(x + box / 2 + 4, y + box / 2 - 16, x + box / 2 + 6, y + box / 2 - 10);
+    ctx.fillStyle = "#00A000";
+    ctx.fill();
+  }
 
   function collision(head, arr) {
     for (let i = 0; i < arr.length; i++) {
@@ -169,4 +226,6 @@ function draw() {
     return false;
   }
 });
+
+
 
