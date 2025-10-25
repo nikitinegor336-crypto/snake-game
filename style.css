@@ -1,37 +1,60 @@
 body {
   margin: 0;
-  font-family: "Arial", sans-serif;
-  background: radial-gradient(circle at center, #101010, #000);
-  color: #fff;
-  text-align: center;
-  overflow: hidden;
-}
-
-h1 {
-  font-size: 2em;
-  margin: 20px 0;
-}
-
-#menu button, #game-container button {
-  background-color: #00a86b;
+  font-family: 'Segoe UI', sans-serif;
   color: white;
-  border: none;
+  background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+canvas {
   border-radius: 12px;
-  padding: 12px 20px;
-  margin: 8px;
-  font-size: 1.1em;
+  box-shadow: 0 0 20px rgba(0,255,127,0.3);
+}
+
+#menu {
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+.logo {
+  font-size: 32px;
+  color: #00FF7F;
+  text-shadow: 0 0 15px #00FF7F;
+}
+
+.btn {
+  display: block;
+  margin: 10px auto;
+  padding: 12px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s;
+  background: linear-gradient(90deg, #00ff99, #00ccff);
+  color: #000;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
-#menu button:hover, #game-container button:hover {
-  background-color: #00c77d;
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00ffcc;
 }
 
-#game {
-  border: 2px solid #00a86b;
-  background-color: #111;
-  margin-top: 10px;
+#game-container {
+  position: relative;
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+.score-text {
+  margin-top: 8px;
+  font-size: 18px;
+  text-shadow: 0 0 8px #00FF7F;
 }
 
 #controls {
@@ -39,19 +62,71 @@ h1 {
 }
 
 #controls button {
+  background: rgba(0,255,127,0.15);
+  border: 1px solid rgba(0,255,127,0.5);
+  color: #00ffcc;
+  border-radius: 50%;
   width: 60px;
   height: 60px;
-  font-size: 1.5em;
+  font-size: 22px;
   margin: 5px;
-  background-color: #222;
-  border: 2px solid #00a86b;
-  border-radius: 10px;
+  text-shadow: 0 0 5px #00FF7F;
+  transition: 0.2s;
 }
 
 #controls button:active {
-  background-color: #00a86b;
+  transform: scale(0.9);
+  background: rgba(0,255,127,0.3);
 }
 
-#snake-animation {
-  background: transparent;
+.middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.game-over {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  z-index: 5;
+  border-radius: 16px;
+}
+
+.game-over h2 {
+  color: #00ff7f;
+  font-size: 1.8em;
+}
+
+.game-over p {
+  font-size: 1.2em;
+  color: #ccc;
+}
+
+.neon-button {
+  padding: 10px 20px;
+  background: #00ff7f;
+  border: none;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.neon-button:hover {
+  box-shadow: 0 0 10px #00ff7f;
+  transform: scale(1.05);
 }
