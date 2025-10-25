@@ -9,13 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("menu");
   const gameContainer = document.getElementById("game-container");
   const playBtn = document.getElementById("playBtn");
-  const restartBtn = document.getElementById("restartBtn");
   const scoreDisplay = document.getElementById("score");
   const title = document.querySelector(".title");
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
 
-  // Новый экран конца игры
+  // Экран окончания игры
   const gameOverScreen = document.createElement("div");
   gameOverScreen.classList.add("game-over");
   gameOverScreen.innerHTML = `
@@ -25,14 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   gameContainer.appendChild(gameOverScreen);
   gameOverScreen.style.display = "none";
-
   const tryAgainBtn = gameOverScreen.querySelector("#tryAgainBtn");
 
   // Название
-  title.textContent = "Snake";
+  title.textContent = "🐍 Snake";
 
   const box = 20;
   let snake, food, dir, game, score = 0, isGameOver = false;
+
+
+  // ===== Звуки =====
+  const eatSound = new Audio("sounds/eat.mp3");
+  const gameOverSound = new Audio("sounds/gameover.mp3");
+  const clickSound = new Audio("sounds/click.mp3");
+
 
   // ===== Мини-змейка в меню =====
   const animCanvas = document.getElementById("snake-animation");
@@ -61,12 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Запуск игры =====
   playBtn.addEventListener("click", () => {
+    clickSound.play();
     menu.style.display = "none";
     gameContainer.style.display = "block";
     startGame();
   });
 
-  restartBtn.addEventListener("click", startGame);
   tryAgainBtn.addEventListener("click", startGame);
 
   function startGame() {
@@ -97,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (["arrowdown", "s"].includes(key) && dir !== "UP") dir = "DOWN";
   });
 
+  // Свайпы (телефон)
   let startX, startY;
   const SWIPE_THRESHOLD = 30;
   document.addEventListener("touchstart", e => {
@@ -122,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
+  // Виртуальные кнопки
   document.getElementById("upBtn").addEventListener("click", () => { if(dir !== "DOWN") dir = "UP"; });
   document.getElementById("downBtn").addEventListener("click", () => { if(dir !== "UP") dir = "DOWN"; });
   document.getElementById("leftBtn").addEventListener("click", () => { if(dir !== "RIGHT") dir = "LEFT"; });
@@ -150,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (dir === "DOWN") snakeY += box;
 
     if (snakeX === food.x && snakeY === food.y) {
+      eatSound.play();
       score++;
       scoreDisplay.innerText = score;
       food = randomFood();
@@ -172,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function gameOver(finalScore) {
+    gameOverSound.play();
     clearInterval(game);
     isGameOver = true;
     document.getElementById("finalScore").textContent = "Ваш счёт: " + finalScore;
@@ -226,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   }
 });
+
 
 
 
