@@ -3,34 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🐍 Змейка</title>
+  <title>Neon Snake</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Главное меню -->
   <div id="menu">
     <canvas id="snake-animation" width="400" height="200"></canvas>
-    <h1>🐍 Змейка</h1>
-    <button id="playBtn">🎮 Играть</button>
-    <button id="recordsBtn">🏆 Рекорды</button>
-    <button id="settingsBtn">⚙️ Настройки</button>
+    <h1 class="logo">🐍 Neon Snake</h1>
+    <button id="playBtn" class="btn">Играть</button>
+    <button id="recordsBtn" class="btn">Рекорды</button>
+    <button id="settingsBtn" class="btn">Настройки</button>
   </div>
 
-  <!-- Игра -->
-  <div id="game-container" style="display:none;">
-    <p>Очки: <span id="score">0</span></p>
+  <div id="game-container" style="display: none;">
     <canvas id="game" width="400" height="400"></canvas>
-    <button id="restartBtn">🔄 Перезапустить</button>
+    <p class="score-text">Очки: <span id="score">0</span></p>
 
-    <!-- Виртуальные кнопки управления -->
     <div id="controls">
-      <button id="upBtn">⬆️</button>
-      <div>
-        <button id="leftBtn">⬅️</button>
-        <button id="downBtn">⬇️</button>
-        <button id="rightBtn">➡️</button>
+      <button id="upBtn">▲</button>
+      <div class="middle">
+        <button id="leftBtn">◀</button>
+        <button id="downBtn">▼</button>
+        <button id="rightBtn">▶</button>
       </div>
     </div>
   </div>
