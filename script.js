@@ -34,9 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ===== Звуки =====
-  const eatSound = new Audio("sounds/eat.mp3");
-  const gameOverSound = new Audio("sounds/gameover.mp3");
-  const clickSound = new Audio("sounds/click.mp3");
+  const eatSound = new Audio("sounds/eat.wav");
+  const gameOverSound = new Audio("sounds/gameover.wav");
+  const clickSound = new Audio("sounds/click.wav");
 
 
   // ===== Мини-змейка в меню =====
