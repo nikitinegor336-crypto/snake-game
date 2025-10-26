@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("menu");
   const gameContainer = document.getElementById("game-container");
   const playBtn = document.getElementById("playBtn");
+  const exitBtn = document.getElementById("exitBtn");
   const scoreDisplay = document.getElementById("score");
   const title = document.querySelector(".title");
   const canvas = document.getElementById("game");
@@ -93,6 +94,14 @@ function unlockAudio() {
   });
 
   tryAgainBtn.addEventListener("click", startGame);
+
+  exitBtn.addEventListener("click", () => {
+    clearInterval(game);
+    gameContainer.style.display = "none";
+    menu.style.display = "block";
+    clickSound.play();
+});
+
 
   function startGame() {
     snake = [{ x: 9 * box, y: 10 * box }];
@@ -255,6 +264,7 @@ function unlockAudio() {
     return false;
   }
 });
+
 
 
 
