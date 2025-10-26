@@ -64,6 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   setInterval(drawAnimatedSnake, 100);
 
+// === Разблокировка звука ===
+document.body.addEventListener("click", unlockAudio, { once: true });
+document.body.addEventListener("touchstart", unlockAudio, { once: true });
+
+function unlockAudio() {
+  eatSound.play().catch(() => {});
+  eatSound.pause();
+  eatSound.currentTime = 0;
+
+  gameOverSound.play().catch(() => {});
+  gameOverSound.pause();
+  gameOverSound.currentTime = 0;
+
+  clickSound.play().catch(() => {});
+  clickSound.pause();
+  clickSound.currentTime = 0;
+
+  console.log("Звуки разблокированы");
+}
+
   // ===== Запуск игры =====
   playBtn.addEventListener("click", () => {
     clickSound.play();
@@ -235,6 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   }
 });
+
 
 
 
